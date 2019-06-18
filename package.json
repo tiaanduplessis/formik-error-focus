@@ -1,0 +1,69 @@
+{
+  "name": "formik-error-focus",
+  "version": "1.0.0",
+  "description": "Scroll to the first error in your Formik form and set focus",
+  "main": "dist/formik-error-focus.js",
+  "source": "src/index.js",
+  "scripts": {
+    "prepublish": "npm run build",
+    "postversion": "npm publish",
+    "preversion": "npm run test",
+    "pretest": "npm run lint",
+    "test": "jest",
+    "lint": "standard --fix",
+    "coverage": "jest --coverage",
+    "build": "microbundle -o dist/ --sourcemap false --compress false --jsx React.createElement --format cjs",
+    "dev": "microbundle watch -o dist/ --sourcemap false --compress false --jsx React.createElement --format cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiaanduplessis/formik-error-focus.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "formik",
+    "errors",
+    "scroll",
+    "scroll-to",
+    "focus"
+  ],
+  "author": "Tiaan du Plessis <tiaanduplessis@hotmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tiaanduplessis/formik-error-focus/issues"
+  },
+  "homepage": "https://github.com/tiaanduplessis/formik-error-focus#readme",
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.7.1",
+    "babel-polyfill": "^6.26.0",
+    "formik": "^1.5.4",
+    "jest": "^24.7.1",
+    "microbundle": "^0.11.0",
+    "react": "^16.8.6",
+    "react-basic-error-boundary": "^1.0.0",
+    "@testing-library/react": "^8.0.1",
+    "react-dom": "^16.8.6",
+    "standard": "^12.0.1"
+  },
+  "peerDependencies": {
+    "formik": "^1.5.4",
+    "react": "^16.8.6"
+  },
+  "dependencies": {
+    "scroll-to-element": "^2.0.3"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": "dist",
+    "env": {
+      "jest": true,
+      "browser": true
+    }
+  }
+}
