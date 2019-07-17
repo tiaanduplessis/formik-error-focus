@@ -36,8 +36,8 @@
   },
   "homepage": "https://github.com/tiaanduplessis/formik-error-focus#readme",
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "7.5.0",
-    "@babel/preset-env": "7.5.2",
+    "@babel/plugin-proposal-class-properties": "7.5.5",
+    "@babel/preset-env": "7.5.5",
     "@babel/preset-react": "7.0.0",
     "babel-eslint": "10.0.2",
     "babel-jest": "24.8.0",
