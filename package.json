@@ -45,10 +45,10 @@
     "formik": "1.5.8",
     "jest": "24.9.0",
     "microbundle": "0.11.0",
-    "react": "16.8.6",
+    "react": "16.10.2",
     "react-basic-error-boundary": "1.1.0",
     "@testing-library/react": "8.0.9",
-    "react-dom": "16.8.6",
+    "react-dom": "16.10.2",
     "standard": "12.0.1"
   },
   "peerDependencies": {
