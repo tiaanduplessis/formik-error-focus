@@ -42,7 +42,7 @@
     "babel-eslint": "10.0.3",
     "babel-jest": "24.9.0",
     "babel-polyfill": "6.26.0",
-    "formik": "1.5.8",
+    "formik": "2.0.3",
     "jest": "24.9.0",
     "microbundle": "0.11.0",
     "react": "16.11.0",
@@ -52,7 +52,7 @@
     "standard": "12.0.1"
   },
   "peerDependencies": {
-    "formik": "^1.5.4",
+    "formik": "^1.5.4 || ^2.0.0",
     "react": "^16.8.6"
   },
   "dependencies": {
