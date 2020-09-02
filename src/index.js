@@ -17,8 +17,10 @@ class ErrorFocus extends Component {
     const keys = Object.keys(errors)
 
     if (keys.length > 0 && isSubmitting && !isValidating) {
-      const selector = `[name="${keys[0]}"]`
-      const errorElement = document.querySelector(selector)
+      const selector = `[data-error-key="${keys[0]}"]`
+      const fallbackSelector = `[name="${keys[0]}"]`
+      const errorElement = document.querySelector(selector) ||
+        document.querySelector(fallbackSelector)
 
       if (errorElement) {
         const { offset, ease, duration, focusDelay, align } = this.props
