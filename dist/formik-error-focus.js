@@ -1,1 +1,78 @@
-var e,t=require("react"),n=require("formik"),r=(e=require("scroll-to-element"))&&"object"==typeof e&&"default"in e?e.default:e;function o(e){return(o=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function i(e,t){return(i=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}var u,a,c,f=function(e){function n(){return function(e,t){if(!(e instanceof n))throw new TypeError("Cannot call a class as a function")}(this),!(e=o(n).apply(this,arguments))||"object"!=typeof e&&"function"!=typeof e?function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(this):e;var e}var u;return function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&i(e,t)}(n,t.Component),(u=[{key:"componentDidUpdate",value:function(e){var t=e.formik,n=t.isSubmitting,o=t.isValidating,i=Object.keys(t.errors);if(i.length>0&&n&&!o){var u='[data-error-key="'.concat(i[0],'"]'),a='[name="'.concat(i[0],'"]'),c=document.querySelector(u)||document.querySelector(a);if(c){var f=this.props,l=f.duration,s=f.focusDelay;r(c,{offset:f.offset,ease:f.ease,duration:l,align:f.align}),this.timeout=setTimeout(function(){return c.focus()},l+s)}}}},{key:"componentWillUnmount",value:function(){this.timeout&&clearTimeout(this.timeout)}},{key:"render",value:function(){return null}}])&&function(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}(n.prototype,u),n}();c={offset:0,align:"top",focusDelay:200,ease:"linear",duration:1e3},(a="defaultProps")in(u=f)?Object.defineProperty(u,a,{value:c,enumerable:!0,configurable:!0,writable:!0}):u[a]=c;var l=n.connect(f);module.exports=l;
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var react = require('react');
+var formik = require('formik');
+var scrollToElement = _interopDefault(require('scroll-to-element'));
+
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+var ErrorFocus =
+/*#__PURE__*/
+function (_Component) {
+  _inheritsLoose(ErrorFocus, _Component);
+
+  function ErrorFocus() {
+    return _Component.apply(this, arguments) || this;
+  }
+
+  var _proto = ErrorFocus.prototype;
+
+  _proto.componentDidUpdate = function componentDidUpdate(prevProps) {
+    var _prevProps$formik = prevProps.formik,
+        isSubmitting = _prevProps$formik.isSubmitting,
+        isValidating = _prevProps$formik.isValidating,
+        errors = _prevProps$formik.errors;
+    var keys = Object.keys(errors);
+
+    if (keys.length > 0 && isSubmitting && !isValidating) {
+      var selector = "[data-error-key=\"" + keys[0] + "\"]";
+      var fallbackSelector = "[name=\"" + keys[0] + "\"]";
+      var errorElement = document.querySelector(selector) || document.querySelector(fallbackSelector);
+
+      if (errorElement) {
+        var _this$props = this.props,
+            offset = _this$props.offset,
+            ease = _this$props.ease,
+            duration = _this$props.duration,
+            focusDelay = _this$props.focusDelay,
+            align = _this$props.align;
+        scrollToElement(errorElement, {
+          offset: offset,
+          ease: ease,
+          duration: duration,
+          align: align
+        });
+        this.timeout = setTimeout(function () {
+          return errorElement.focus();
+        }, duration + focusDelay);
+      }
+    }
+  };
+
+  _proto.componentWillUnmount = function componentWillUnmount() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+  };
+
+  _proto.render = function render() {
+    return null;
+  };
+
+  return ErrorFocus;
+}(react.Component);
+
+ErrorFocus.defaultProps = {
+  offset: 0,
+  align: 'top',
+  focusDelay: 200,
+  ease: 'linear',
+  duration: 1000
+};
+var index = formik.connect(ErrorFocus);
+
+module.exports = index;
