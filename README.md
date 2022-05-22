@@ -1,39 +1,64 @@
-
 # formik-error-focus
+
 [![package version](https://img.shields.io/npm/v/formik-error-focus.svg?style=flat-square)](https://npmjs.org/package/formik-error-focus)
 [![package downloads](https://img.shields.io/npm/dm/formik-error-focus.svg?style=flat-square)](https://npmjs.org/package/formik-error-focus)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![package license](https://img.shields.io/npm/l/formik-error-focus.svg?style=flat-square)](https://npmjs.org/package/formik-error-focus)
 [![make a pull request](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-> Scroll to the first error in your Formik form and set focus
+Scroll to the first error in your Formik form and set focus
 
 ## Table of Contents
 
-- [About](#about)
-- [Usage](#usage)
-- [Install](#install)
-- [Contribute](#contribute)
-- [License](#License)
+- [formik-error-focus](#formik-error-focus)
+  - [Table of Contents](#table-of-contents)
+  - [👀 Background](#-background)
+  - [⚙️ Install](#️-install)
+  - [📖 Usage](#-usage)
+  - [📚 API](#-api)
+  - [💬 Contributing](#-contributing)
+  - [🪪 License](#-license)
 
-## About
+## 👀 Background
 
 Wrapper around [scroll-to-element](https://www.npmjs.com/package/scroll-to-element) that scrolls to the first error element in Formik.
 
-## Usage
+## ⚙️ Install
+
+Install the package locally within you project folder with your package manager:
+
+With `npm`:
+
+```sh
+npm install formik-error-focus
+```
+
+With `yarn`:
+
+```sh
+yarn add formik-error-focus
+```
+
+With `pnpm`:
+
+```sh
+pnpm add formik-error-focus
+```
+
+## 📖 Usage
 
 ```js
-import React from 'react'
-import { Formik, Field, Form } from 'formik'
-import FormikErrorFocus from 'formik-error-focus'
+import React from "react";
+import { Formik, Field, Form } from "formik";
+import FormikErrorFocus from "formik-error-focus";
 
-export const Signup = () =>
+export const Signup = () => (
   <div>
     <h1>My Uncool Persisted Form</h1>
     <Formik
-      onSubmit={values => console.log(values)}
-      initialValues={{ firstName: '', lastName: '', email: '' }}
-      render={props =>
+      onSubmit={(values) => console.log(values)}
+      initialValues={{ firstName: "", lastName: "", email: "" }}
+      render={(props) => (
         <Form className="whatever">
           <Field name="firstName" placeholder="First Name" />
           <Field name="lastName" placeholder="Last Name" />
@@ -42,34 +67,26 @@ export const Signup = () =>
           <FormikErrorFocus
             // See scroll-to-element for configuration options: https://www.npmjs.com/package/scroll-to-element
             offset={0}
-            align={'top'}
+            align={"top"}
             focusDelay={200}
-            ease={'linear'}
+            ease={"linear"}
             duration={1000}
           />
-        </Form>}
+        </Form>
+      )}
     />
-  </div>;
+  </div>
+);
 ```
 
+## 📚 API
 
-## Install
+For all configuration options, please see the [API docs](https://paka.dev/npm/formik-error-focus).
 
-This project uses [node](https://nodejs.org) and [npm](https://www.npmjs.com).
+## 💬 Contributing
 
-```sh
-$ npm install formik-error-focus
-$ # OR
-$ yarn add formik-error-focus
-```
+Got an idea for a new feature? Found a bug? Contributions are welcome! Please [open up an issue](https://github.com/tiaanduplessis/formik-error-focus/issues) or [make a pull request](https://makeapullrequest.com/).
 
-## Contribute
+## 🪪 License
 
-1. Fork it and create your feature branch: `git checkout -b my-new-feature`
-2. Commit your changes: `git commit -am "Add some feature"`
-3. Push to the branch: `git push origin my-new-feature`
-4. Submit a pull request
-
-## License
-
-MIT © Tiaan du Plessis
+[MIT © Tiaan du Plessis](./LICENSE)

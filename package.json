@@ -2,18 +2,16 @@
   "name": "formik-error-focus",
   "version": "1.1.0",
   "description": "Scroll to the first error in your Formik form and set focus",
-  "main": "dist/formik-error-focus.js",
-  "source": "src/index.js",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "scripts": {
-    "prepublish": "npm run build",
-    "postversion": "npm publish",
-    "preversion": "npm run test",
-    "pretest": "npm run lint",
-    "test": "jest",
-    "lint": "standard --fix",
-    "coverage": "jest --coverage",
-    "build": "microbundle -o dist/ --sourcemap false --compress false --jsx React.createElement --format cjs",
-    "dev": "microbundle watch -o dist/ --sourcemap false --compress false --jsx React.createElement --format cjs"
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "build": "rm -rf dist && tsup src/index.tsx --format cjs,esm --dts",
+    "prepublishOnly": "npm run build",
+    "types:check": "tsc --noEmit",
+    "format": "pretty-quick --ignore-path .gitignore"
   },
   "repository": {
     "type": "git",
@@ -36,35 +34,23 @@
   },
   "homepage": "https://github.com/tiaanduplessis/formik-error-focus#readme",
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "7.7.0",
-    "@babel/preset-env": "7.7.1",
-    "@babel/preset-react": "7.7.0",
-    "@testing-library/react": "8.0.9",
-    "babel-eslint": "10.0.3",
-    "babel-jest": "24.9.0",
-    "babel-polyfill": "6.26.0",
-    "formik": "1.5.8",
-    "jest": "24.9.0",
-    "microbundle": "^0.12.3",
-    "react": "16.11.0",
-    "react-basic-error-boundary": "1.1.0",
-    "react-dom": "16.11.0",
-    "standard": "12.0.1"
+    "@types/flat": "^5.0.2",
+    "@types/react": "^18.0.9",
+    "@types/scroll-to-element": "^2.0.2",
+    "formik": "^2.2.9",
+    "jsdom": "^19.0.0",
+    "prettier": "^2.6.2",
+    "pretty-quick": "^3.1.3",
+    "react": "^18.1.0",
+    "tsup": "^5.12.8",
+    "typescript": "^4.6.4"
   },
   "peerDependencies": {
-    "formik": "^1",
-    "react": "^16"
+    "formik": ">= 1",
+    "react": ">= 16.3"
   },
   "dependencies": {
     "flat": "^5.0.2",
     "scroll-to-element": "^2.0.3"
-  },
-  "standard": {
-    "parser": "babel-eslint",
-    "ignore": "dist",
-    "env": {
-      "jest": true,
-      "browser": true
-    }
   }
 }
