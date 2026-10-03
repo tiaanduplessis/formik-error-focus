@@ -15,6 +15,7 @@ Scroll to the first error in your Formik form and set focus
   - [👀 Background](#-background)
   - [⚙️ Install](#️-install)
   - [📖 Usage](#-usage)
+    - [Using useFormik](#using-useformik)
   - [📚 API](#-api)
   - [💬 Contributing](#-contributing)
   - [🪪 License](#-license)
@@ -24,6 +25,8 @@ Scroll to the first error in your Formik form and set focus
 Wrapper around [scroll-to-element](https://www.npmjs.com/package/scroll-to-element) that scrolls to the first error element in Formik.
 
 Error targets are selected in DOM order, regardless of the order of keys in Formik's errors object. A matching `data-error-key` takes precedence over `name` for the same error key. Nested errors use dot-separated paths, such as `address.street` or `friends.0.email`. Errors without a matching element are skipped.
+
+Scrolling uses the current errors after validation and submission finish. Validation on change or blur alone does not trigger it. Disabled or otherwise non-focusable elements can still be selected and scrolled to, but the browser may refuse to focus them. Use `data-error-key` on a focusable target when a custom control needs one.
 
 ## ⚙️ Install
 
@@ -80,6 +83,49 @@ export const Signup = () => (
   </div>
 );
 ```
+
+### Using useFormik
+
+With Formik 2 and React 16.8 or newer, wrap the form in `FormikProvider` and pass it the complete object returned by `useFormik`. The hook and a native `<form>` do not provide Formik context by themselves. `FormikErrorFocus` must be inside the provider:
+
+```jsx
+import React from "react";
+import { FormikProvider, useFormik } from "formik";
+import FormikErrorFocus from "formik-error-focus";
+
+export function SignupWithHook() {
+  const formik = useFormik({
+    initialValues: { email: "" },
+    validate: (values) => (values.email ? {} : { email: "Required" }),
+    onSubmit: (_values, { setSubmitting }) => {
+      // Replace this with your submission logic.
+      setSubmitting(false);
+    },
+  });
+
+  return (
+    <FormikProvider value={formik}>
+      <form noValidate onSubmit={formik.handleSubmit}>
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        <button type="submit">Submit</button>
+        <FormikErrorFocus offset={0} focusDelay={200} />
+      </form>
+    </FormikProvider>
+  );
+}
+```
+
+The default export reads context through Formik's `connect`. Passing `formik={formik}` directly to `FormikErrorFocus` does not replace the provider: `connect` overwrites that prop with its context value. Missing context can cause the `prevProps.formik`/`props.formik` undefined error.
+
+For synchronous `onSubmit` handlers, call `setSubmitting(false)` when finished. If the handler returns a Promise, Formik settles `isSubmitting` automatically. Existing `<Formik>` usage already supplies the required context and does not need another provider.
 
 ## 📚 API
 

@@ -17,7 +17,15 @@ require.cache[require.resolve("scroll-to-element")] = {
   exports: (element, options) => scrolls.push({ element, options }),
 };
 const React = require("react");
-const { createRoot } = require("react-dom/client");
+const ReactDOM = require("react-dom");
+const { act } = React.act ? React : require("react-dom/test-utils");
+const createRoot =
+  Number(React.version.split(".")[0]) >= 18
+    ? require("react-dom/client").createRoot
+    : (container) => ({
+        render: (element) => ReactDOM.render(element, container),
+        unmount: () => ReactDOM.unmountComponentAtNode(container),
+      });
 const { FormikProvider } = require("formik");
 const ErrorFocus = require("../dist/index.js").default;
 const UnconnectedErrorFocus = ErrorFocus.WrappedComponent;
@@ -33,13 +41,21 @@ function field(name, attributes = {}, tag = "input") {
 }
 
 function update(errors, formik = {}, props = {}) {
+  const previousFormik = {
+    errors,
+    isSubmitting: true,
+    isValidating: false,
+    submitCount: 1,
+    ...formik,
+  };
   const instance = new UnconnectedErrorFocus({
     ...UnconnectedErrorFocus.defaultProps,
     duration: 0,
+    formik: { ...previousFormik, isSubmitting: false },
     ...props,
   });
   instance.componentDidUpdate({
-    formik: { errors, isSubmitting: true, isValidating: false, ...formik },
+    formik: previousFormik,
   });
   return instance;
 }
@@ -234,11 +250,70 @@ test("connects to Formik context and follows rendered field order", () => {
     );
   }
   try {
-    React.act(() => render(true));
+    act(() => render(true));
     assert.equal(scrolls.length, 0);
-    React.act(() => render(false));
+    act(() => render(false));
     expectTarget(container.querySelector('[name="first"]'));
   } finally {
-    React.act(() => root.unmount());
+    act(() => root.unmount());
   }
 });
+
+test("handles a submission whose start and completion were batched", () => {
+  const first = field("first");
+  const instance = new UnconnectedErrorFocus({
+    ...UnconnectedErrorFocus.defaultProps,
+    duration: 0,
+    formik: {
+      errors: { first: "Required" },
+      isSubmitting: false,
+      isValidating: false,
+      submitCount: 1,
+    },
+  });
+  instance.componentDidUpdate({
+    formik: {
+      errors: {},
+      isSubmitting: false,
+      isValidating: false,
+      submitCount: 0,
+    },
+  });
+  expectTarget(first);
+});
+
+test("uses current errors rather than errors cleared by validation", () => {
+  field("first");
+  update(
+    { first: "Required" },
+    {},
+    {
+      formik: {
+        errors: {},
+        isSubmitting: false,
+        isValidating: false,
+        submitCount: 1,
+      },
+    },
+  );
+  assert.equal(scrolls.length, 0);
+});
+
+for (const isSubmitting of [false, true]) {
+  test(`does not focus on reset while previously submitting=${isSubmitting}`, () => {
+    field("first");
+    update(
+      { first: "Required" },
+      { isSubmitting, submitCount: 1 },
+      {
+        formik: {
+          errors: { first: "Required" },
+          isSubmitting: false,
+          isValidating: false,
+          submitCount: 0,
+        },
+      },
+    );
+    assert.equal(scrolls.length, 0);
+  });
+}
