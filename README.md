@@ -23,6 +23,8 @@ Scroll to the first error in your Formik form and set focus
 
 Wrapper around [scroll-to-element](https://www.npmjs.com/package/scroll-to-element) that scrolls to the first error element in Formik.
 
+Error targets are selected in DOM order, regardless of the order of keys in Formik's errors object. A matching `data-error-key` takes precedence over `name` for the same error key. Nested errors use dot-separated paths, such as `address.street` or `friends.0.email`. Errors without a matching element are skipped.
+
 ## ⚙️ Install
 
 Install the package locally within you project folder with your package manager:
@@ -84,6 +86,17 @@ export const Signup = () => (
 For all configuration options, please see the [API docs](https://paka.dev/npm/formik-error-focus).
 
 ## 💬 Contributing
+
+For local development, use Node.js 22 or newer and pnpm 10.34.6:
+
+```sh
+pnpm install --frozen-lockfile --ignore-scripts
+pnpm test
+pnpm run types:check
+pnpm run format:check
+```
+
+The tests build the package and exercise target selection in a DOM, including Formik context integration. `pnpm run coverage` also reports test coverage.
 
 Got an idea for a new feature? Found a bug? Contributions are welcome! Please [open up an issue](https://github.com/tiaanduplessis/formik-error-focus/issues) or [make a pull request](https://makeapullrequest.com/).
 

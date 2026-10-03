@@ -29,10 +29,24 @@ class ErrorFocus extends Component<ErrorFocusProps> {
     const keys = Object.keys(flatten(errors));
 
     if (keys.length > 0 && isSubmitting && !isValidating) {
-      const selector = `[data-error-key="${keys[0]}"]`;
-      const fallbackSelector = `[name="${keys[0]}"]`;
-      const errorElement = (document.querySelector(selector) ||
-        document.querySelector(fallbackSelector)) as HTMLInputElement;
+      const errorKeys = new Set(keys);
+      const elements = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-error-key], [name]"),
+      );
+      // A custom target still takes precedence over a name match for its key.
+      const customErrorKeys = new Set(
+        elements
+          .map((element) => element.getAttribute("data-error-key"))
+          .filter((key): key is string => key !== null && errorKeys.has(key)),
+      );
+      const errorElement = elements.find((element) => {
+        const key = element.getAttribute("data-error-key");
+        const name = element.getAttribute("name");
+        return (
+          (key !== null && errorKeys.has(key)) ||
+          (name !== null && errorKeys.has(name) && !customErrorKeys.has(name))
+        );
+      });
 
       if (errorElement) {
         const { offset, ease, duration, focusDelay, align } = this.props;
@@ -46,7 +60,7 @@ class ErrorFocus extends Component<ErrorFocusProps> {
         if (duration) {
           this.timeout = setTimeout(
             () => errorElement.focus(),
-            duration + focusDelay
+            duration + focusDelay,
           );
         }
       }
