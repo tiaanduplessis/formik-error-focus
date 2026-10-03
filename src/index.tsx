@@ -25,10 +25,18 @@ class ErrorFocus extends Component<ErrorFocusProps> {
   };
 
   componentDidUpdate(prevProps: ErrorFocusProps) {
-    const { isSubmitting, isValidating, errors } = prevProps.formik;
+    const { isSubmitting, isValidating, errors, submitCount } =
+      this.props.formik;
+    // Validation and submission updates can be batched into one render.
+    const submissionFinished =
+      !isSubmitting &&
+      !isValidating &&
+      ((prevProps.formik.isSubmitting &&
+        submitCount === prevProps.formik.submitCount) ||
+        submitCount > prevProps.formik.submitCount);
     const keys = Object.keys(flatten(errors));
 
-    if (keys.length > 0 && isSubmitting && !isValidating) {
+    if (keys.length > 0 && submissionFinished) {
       const errorKeys = new Set(keys);
       const elements = Array.from(
         document.querySelectorAll<HTMLElement>("[data-error-key], [name]"),
@@ -78,4 +86,8 @@ class ErrorFocus extends Component<ErrorFocusProps> {
   }
 }
 
-export default connect(ErrorFocus);
+type ConnectedErrorFocusProps = Omit<ErrorFocusProps, "formik"> & {
+  formik?: ErrorFocusProps["formik"];
+};
+
+export default connect<ConnectedErrorFocusProps>(ErrorFocus);
