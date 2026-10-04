@@ -36,6 +36,7 @@
   "homepage": "https://github.com/tiaanduplessis/formik-error-focus#readme",
   "devDependencies": {
     "@types/flat": "^5.0.2",
+    "@types/hoist-non-react-statics": "3.3.7",
     "@types/react": "18.3.31",
     "@types/scroll-to-element": "^2.0.2",
     "formik": "2.4.9",
@@ -43,10 +44,10 @@
     "prettier": "3.9.9",
     "pretty-quick": "4.2.2",
     "react": "18.3.1",
-    "tsup": "8.5.1",
-    "typescript": "5.9.3",
     "react-dom": "18.3.1",
-    "@types/hoist-non-react-statics": "3.3.7"
+    "react-select": "5.10.2",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "formik": ">= 1",

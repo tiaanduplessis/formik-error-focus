@@ -13,6 +13,50 @@ export type ErrorFocusProps = {
   focusDelay: number;
 } & { formik: FormikContextType<{}> };
 
+function focusErrorElement(element: HTMLElement, isCustomTarget: boolean) {
+  const { ownerDocument } = element;
+  const previousActiveElement = ownerDocument.activeElement;
+  element.focus();
+
+  // Preserve direct focus and custom handlers that forward it elsewhere.
+  if (
+    !isCustomTarget ||
+    element.hasAttribute("tabindex") ||
+    element.contains(ownerDocument.activeElement) ||
+    ownerDocument.activeElement !== previousActiveElement
+  ) {
+    return;
+  }
+
+  const candidates = element.querySelectorAll<HTMLElement>(
+    'input, select, textarea, button, a[href], [tabindex], [contenteditable="true"], [contenteditable=""]',
+  );
+  for (const candidate of Array.from(candidates)) {
+    if (
+      candidate.matches('input[type="hidden"], :disabled') ||
+      candidate.closest('[hidden], [inert], [aria-hidden="true"]')
+    ) {
+      continue;
+    }
+
+    const view = ownerDocument.defaultView;
+    if (view) {
+      const style = view.getComputedStyle(candidate);
+      if (style.visibility === "hidden" || style.visibility === "collapse") {
+        continue;
+      }
+      let ancestor: HTMLElement | null = candidate;
+      while (ancestor && view.getComputedStyle(ancestor).display !== "none") {
+        ancestor = ancestor.parentElement;
+      }
+      if (ancestor) continue;
+    }
+
+    candidate.focus();
+    if (ownerDocument.activeElement !== previousActiveElement) return;
+  }
+}
+
 class ErrorFocus extends Component<ErrorFocusProps> {
   timeout: number | null = null;
 
@@ -66,8 +110,13 @@ class ErrorFocus extends Component<ErrorFocusProps> {
         });
 
         if (duration) {
+          const customKey = errorElement.getAttribute("data-error-key");
           this.timeout = setTimeout(
-            () => errorElement.focus(),
+            () =>
+              focusErrorElement(
+                errorElement,
+                customKey !== null && errorKeys.has(customKey),
+              ),
             duration + focusDelay,
           );
         }
